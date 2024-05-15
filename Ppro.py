@@ -1,0 +1,40 @@
+def dijkstra(graph, start):
+    # Инициализация
+    distances = {node: float('infinity') for node in graph}
+    distances[start] = 0
+    visited = set()
+
+    while len(visited) < len(graph):
+        # Находим вершину с минимальным расстоянием
+        min_node = None
+        min_distance = float('infinity')
+        for node in graph:
+            if node not in visited and distances[node] < min_distance:
+                min_node = node
+                min_distance = distances[node]
+
+        visited.add(min_node)
+
+        # Обновляем расстояния до соседних вершин
+        for neighbor, weight in graph[min_node].items():
+            new_distance = distances[min_node] + weight
+            if new_distance < distances[neighbor]:
+                distances[neighbor] = new_distance
+
+    return distances
+
+
+# Пример графа в виде матрицы смежности
+graph = {
+    'A': {'B': 1, 'C': 4},
+    'B': {'A': 1, 'C': 2, 'D': 5},
+    'C': {'A': 4, 'B': 2, 'D': 1},
+    'D': {'B': 5, 'C': 1}
+}
+
+start_node = 'A'
+shortest_distances = dijkstra(graph, start_node)
+
+# Выводим кратчайшие расстояния от начальной вершины до всех остальных
+for node, distance in shortest_distances.items():
+    print(f'Shortest distance from {start_node} to {node}: {distance}')
